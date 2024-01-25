@@ -155,6 +155,7 @@ private:
 	void _delete_temp();
 
 	static Ref<FileAccess> _create_temp(int p_mode_flags, const String &p_prefix = "", const String &p_extension = "", bool p_keep = false);
+	static HashMap<String, String> resource_paths;
 
 public:
 	static void set_file_close_fail_notify_callback(FileCloseFailNotify p_cbk) { close_fail_notify = p_cbk; }
@@ -267,6 +268,12 @@ public:
 
 	static PackedByteArray _get_file_as_bytes(const String &p_path) { return get_file_as_bytes(p_path, &last_file_open_error); }
 	static String _get_file_as_string(const String &p_path) { return get_file_as_string(p_path, &last_file_open_error); }
+
+	static void add_resource_path(const String &p_protocol, const String &p_path);
+	static void remove_resource_path(const String &p_protocol);
+	static bool is_resource_path(const String &p_protocol);
+	static String get_resource_path(const String &p_protocol);
+	static Dictionary get_resource_paths();
 
 	template <typename T>
 	static void make_default(AccessType p_access) {
