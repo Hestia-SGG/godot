@@ -1003,6 +1003,9 @@ void FileAccess::add_resource_path(const String &p_protocol, const String &p_pat
 	ERR_FAIL_COND_MSG(protocol == "res" || protocol == "user", vformat(R"(Protocol "%s://" is built-in.)", protocol));
 	ERR_FAIL_COND_MSG(resource_paths.has(protocol), vformat(R"(Protocol "%s://" is already registered as a resource path.)", protocol));
 	ERR_FAIL_COND_MSG(resource_paths_class.has(protocol), vformat(R"(Protocol "%s://" is already registered as a resource path class.)", protocol));
+	ERR_FAIL_COND_MSG(!Engine::get_singleton()->is_editor_hint() && protocol == "editor", R"(Protocol "editor://" cannot be registered when the editor is not running.)");
+
+	print_line(vformat("adding %s as a protocol for %s", p_protocol, p_path));
 
 	resource_paths[protocol] = p_path;
 }
@@ -1012,6 +1015,7 @@ void FileAccess::remove_resource_path(const String &p_protocol) {
 	String protocol = _get_protocol(p_protocol);
 	ERR_FAIL_COND_MSG(protocol == "res" || protocol == "user", vformat(R"(Protocol "%s://" is built-in.)", protocol));
 	ERR_FAIL_COND_MSG(!resource_paths.has(protocol), vformat(R"(Protocol "%s://" is not registered as a resource class.)", protocol));
+	ERR_FAIL_COND_MSG(protocol == "editor", R"(Protocol "editor://" cannot be unregistered.)");
 
 	resource_paths.erase(protocol);
 }
@@ -1045,6 +1049,7 @@ void FileAccess::add_resource_path_class(const String &p_protocol, const String 
 	ERR_FAIL_COND_MSG(p_protocol.is_empty(), "Protocol parameter is empty.");
 	String protocol = _get_protocol(p_protocol);
 	ERR_FAIL_COND_MSG(protocol == "res" || protocol == "user", vformat(R"(Protocol "%s://" is built-in.)", protocol));
+	ERR_FAIL_COND_MSG(protocol == "editor", R"(Protocol "editor://" cannot be added with `FileAccess::add_resource_path_class`)");
 	ERR_FAIL_COND_MSG(resource_paths.has(protocol), vformat(R"(Protocol "%s://" is already registered as a resource path.)", protocol));
 	ERR_FAIL_COND_MSG(resource_paths_class.has(protocol), vformat(R"(Protocol "%s://" is already registered as a resource path class.)", protocol));
 
