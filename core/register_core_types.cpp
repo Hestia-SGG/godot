@@ -44,6 +44,7 @@
 #include "core/input/shortcut.h"
 #include "core/io/config_file.h"
 #include "core/io/dir_access.h"
+#include "core/io/dir_access_extension.h"
 #include "core/io/dtls_server.h"
 #include "core/io/file_access_encrypted.h"
 #include "core/io/file_access_extension.h"
@@ -254,8 +255,9 @@ void register_core_types() {
 	GDREGISTER_CLASS(ResourceFormatSaver);
 
 	GDREGISTER_ABSTRACT_CLASS(FileAccess);
-	GDREGISTER_ABSTRACT_CLASS(DirAccess);
 	GDREGISTER_VIRTUAL_CLASS(FileAccessExtension);
+	GDREGISTER_ABSTRACT_CLASS(DirAccess);
+	GDREGISTER_VIRTUAL_CLASS(DirAccessExtension);	
 	GDREGISTER_CLASS(CoreBind::Thread);
 	GDREGISTER_CLASS(CoreBind::Mutex);
 	GDREGISTER_CLASS(CoreBind::Semaphore);
