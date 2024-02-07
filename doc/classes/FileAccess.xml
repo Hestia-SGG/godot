@@ -44,13 +44,6 @@
 		<link title="3D Voxel Demo">https://godotengine.org/asset-library/asset/2755</link>
 	</tutorials>
 	<methods>
-		<method name="add_resource_path" qualifiers="static">
-			<return type="void" />
-			<param index="0" name="protocol" type="String" />
-			<param index="1" name="path" type="String" />
-			<description>
-			</description>
-		</method>
 		<method name="close">
 			<return type="void" />
 			<description>
@@ -166,6 +159,17 @@
 				Alice,"I thought you'd reply with ""Hello, world""."
 				[/codeblock]
 				Note how the second line can omit the enclosing quotes as it does not include the delimiter. However it [i]could[/i] very well use quotes, it was only written without for demonstration purposes. The third line must use [code]""[/code] for each quotation mark that needs to be interpreted as such instead of the end of a text value.
+			</description>
+		</method>
+		<method name="get_custom_path_data" qualifiers="static">
+			<return type="Dictionary" />
+			<param index="0" name="protocol" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_custom_paths" qualifiers="static">
+			<return type="PackedStringArray" />
+			<description>
 			</description>
 		</method>
 		<method name="get_double" qualifiers="const">
@@ -289,17 +293,6 @@
 				If the file was saved by a Godot build compiled with the [code]precision=single[/code] option (the default), the number of read bits for that file is 32. Otherwise, if compiled with the [code]precision=double[/code] option, the number of read bits is 64.
 			</description>
 		</method>
-		<method name="get_resource_path" qualifiers="static">
-			<return type="String" />
-			<param index="0" name="protocol" type="String" />
-			<description>
-			</description>
-		</method>
-		<method name="get_resource_paths" qualifiers="static">
-			<return type="Dictionary" />
-			<description>
-			</description>
-		</method>
 		<method name="get_sha256" qualifiers="static">
 			<return type="String" />
 			<param index="0" name="path" type="String" />
@@ -331,15 +324,30 @@
 				[b]Warning:[/b] Deserialized objects can contain code which gets executed. Do not use this option if the serialized object comes from untrusted sources to avoid potential security threats such as remote code execution.
 			</description>
 		</method>
+		<method name="is_custom_path" qualifiers="static">
+			<return type="bool" />
+			<param index="0" name="protocol" type="String" />
+			<description>
+			</description>
+		</method>
 		<method name="is_open" qualifiers="const">
 			<return type="bool" />
 			<description>
 				Returns [code]true[/code] if the file is currently opened.
 			</description>
 		</method>
-		<method name="is_resource_path" qualifiers="static">
-			<return type="bool" />
+		<method name="map_classes_to_custom_path" qualifiers="static">
+			<return type="void" />
 			<param index="0" name="protocol" type="String" />
+			<param index="1" name="file_access_class" type="String" />
+			<param index="2" name="dir_access_class" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="map_path_to_custom_path" qualifiers="static">
+			<return type="void" />
+			<param index="0" name="protocol" type="String" />
+			<param index="1" name="path" type="String" />
 			<description>
 			</description>
 		</method>
@@ -392,7 +400,7 @@
 				Resizes the file to a specified length. The file must be open in a mode that permits writing. If the file is extended, NUL characters are appended. If the file is truncated, all data from the end file to the original length of the file is lost.
 			</description>
 		</method>
-		<method name="remove_resource_path" qualifiers="static">
+		<method name="remove_custom_path" qualifiers="static">
 			<return type="void" />
 			<param index="0" name="protocol" type="String" />
 			<description>
