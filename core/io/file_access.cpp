@@ -95,7 +95,7 @@ Ref<FileAccess> FileAccess::create_for_path(const String &p_path) {
 				} else if (ClassDB::can_instantiate(kv.value[0])) {
 					Object *obj = ClassDB::instantiate(kv.value[0]);
 					ERR_FAIL_NULL_V_MSG(obj, Ref<FileAccess>(), vformat("Failed to add a FileAccess instance, cannot instantiate '%s'.", kv.value[0]));
-					ret = Object::cast_to<Ref<FileAccess>>(obj);
+					ret = Ref<FileAccess>(Object::cast_to<FileAccess>(obj));
 				}
 			}
 		}

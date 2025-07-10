@@ -80,6 +80,18 @@ uint64_t FileAccessExtension::_get_modified_time(const String &p_file) {
 	return time;
 }
 
+uint64_t FileAccessExtension::_get_access_time(const String &p_file) {
+	uint64_t time = 0;
+	GDVIRTUAL_REQUIRED_CALL(__get_access_time, p_file, time);
+	return time;
+}
+
+int64_t FileAccessExtension::_get_size(const String &p_file) {
+	int64_t size = 0;
+	GDVIRTUAL_REQUIRED_CALL(__get_size, p_file, size);
+	return size;
+}
+
 bool FileAccessExtension::is_open() const {
 	bool is_open = false;
 	GDVIRTUAL_REQUIRED_CALL(_is_open, is_open);
@@ -257,72 +269,90 @@ Error FileAccessExtension::get_error() const {
 	return err;
 }
 
+Error FileAccessExtension::resize(int64_t p_length) {
+	Error err = OK;
+	GDVIRTUAL_REQUIRED_CALL(_resize, p_length, err);
+	return err;
+}
+
 void FileAccessExtension::flush() {
 	GDVIRTUAL_REQUIRED_CALL(_flush);
 }
 
-void FileAccessExtension::store_8(uint8_t p_dest) {
-	GDVIRTUAL_REQUIRED_CALL(_store_8, p_dest);
+bool FileAccessExtension::store_8(uint8_t p_dest) {
+	bool success = false;
+	GDVIRTUAL_REQUIRED_CALL(_store_8, p_dest, success);
+	return success;
 }
 
-void FileAccessExtension::store_16(uint16_t p_dest) {
-	if (!GDVIRTUAL_CALL(_store_16, p_dest)) {
-		FileAccess::store_16(p_dest);
-	}
+bool FileAccessExtension::store_16(uint16_t p_dest) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_16, p_dest, success)) {
+		return FileAccess::store_16(p_dest);
+	} else return success;
 }
 
-void FileAccessExtension::store_32(uint32_t p_dest) {
-	if (!GDVIRTUAL_CALL(_store_32, p_dest)) {
-		FileAccess::store_32(p_dest);
-	}
+bool FileAccessExtension::store_32(uint32_t p_dest) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_32, p_dest, success)) {
+		return FileAccess::store_32(p_dest);
+	} else return success;
 }
 
-void FileAccessExtension::store_64(uint64_t p_dest) {
-	if (!GDVIRTUAL_CALL(_store_64, p_dest)) {
-		FileAccess::store_64(p_dest);
-	}
+bool FileAccessExtension::store_64(uint64_t p_dest) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_64, p_dest, success)) {
+		return FileAccess::store_64(p_dest);
+	} else return success;
 }
 
-void FileAccessExtension::store_float(float p_dest) {
-	if (!GDVIRTUAL_CALL(_store_float, p_dest)) {
-		FileAccess::store_float(p_dest);
-	}
+bool FileAccessExtension::store_float(float p_dest) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_float, p_dest, success)) {
+		return FileAccess::store_float(p_dest);
+	} else return success;
 }
 
-void FileAccessExtension::store_double(double p_dest) {
-	if (!GDVIRTUAL_CALL(_store_double, p_dest)) {
-		FileAccess::store_double(p_dest);
-	}
+bool FileAccessExtension::store_double(double p_dest) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_double, p_dest, success)) {
+		return FileAccess::store_double(p_dest);
+	} else return success;
 }
 
-void FileAccessExtension::store_real(real_t p_dest) {
-	if (!GDVIRTUAL_CALL(_store_real, p_dest)) {
-		FileAccess::store_real(p_dest);
-	}
+bool FileAccessExtension::store_real(real_t p_dest) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_real, p_dest, success)) {
+		return FileAccess::store_real(p_dest);
+	} else return success;
 }
 
-void FileAccessExtension::store_string(const String &p_string) {
-	if (!GDVIRTUAL_CALL(_store_string, p_string)) {
-		FileAccess::store_string(p_string);
-	}
+bool FileAccessExtension::store_string(const String &p_string) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_string, p_string, success)) {
+		return FileAccess::store_string(p_string);
+	} else return success;
 }
 
-void FileAccessExtension::store_line(const String &p_line) {
-	if (!GDVIRTUAL_CALL(_store_line, p_line)) {
-		FileAccess::store_line(p_line);
-	}
+bool FileAccessExtension::store_line(const String &p_line) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_line, p_line, success)) {
+		return FileAccess::store_line(p_line);
+	} else return success;
 }
 
-void FileAccessExtension::store_csv_line(const Vector<String> &p_values, const String &p_delim) {
-	if (!GDVIRTUAL_CALL(_store_csv_line, p_values, p_delim)) {
-		FileAccess::store_csv_line(p_values, p_delim);
-	}
+bool FileAccessExtension::store_csv_line(const Vector<String> &p_values, const String &p_delim) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_csv_line, p_values, p_delim, success)) {
+		return FileAccess::store_csv_line(p_values, p_delim);
+	} else return success;
 }
 
-void FileAccessExtension::store_pascal_string(const String &p_string) {
-	if (!GDVIRTUAL_CALL(_store_pascal_string, p_string)) {
-		FileAccess::store_pascal_string(p_string);
-	}
+bool FileAccessExtension::store_pascal_string(const String &p_string) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_pascal_string, p_string, success)) {
+		return FileAccess::store_pascal_string(p_string);
+	} else return success;
 }
 
 String FileAccessExtension::get_pascal_string() {
@@ -333,25 +363,27 @@ String FileAccessExtension::get_pascal_string() {
 	return FileAccess::get_pascal_string();
 }
 
-void FileAccessExtension::store_buffer(const uint8_t *p_src, uint64_t p_length) {
+bool FileAccessExtension::store_buffer(const uint8_t *p_src, uint64_t p_length) {
 	Vector<uint8_t> buffer;
 	uint64_t i = 0;
 	for (i = 0; i < p_length; i++) {
 		buffer.insert(i, p_src[i]);
 	}
-	store_buffer(buffer);
+	return store_buffer(buffer);
 }
 
-void FileAccessExtension::store_buffer(const Vector<uint8_t> &p_buffer) {
-	if (!GDVIRTUAL_CALL(_store_buffer, p_buffer)) {
-		FileAccess::store_buffer(p_buffer);
-	}
+bool FileAccessExtension::store_buffer(const Vector<uint8_t> &p_buffer) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_buffer, p_buffer, success)) {
+		return FileAccess::store_buffer(p_buffer);
+	} else return success;
 }
 
-void FileAccessExtension::store_var(const Variant &p_var, bool p_full_objects) {
-	if (!GDVIRTUAL_CALL(_store_var, p_var, p_full_objects)) {
-		FileAccess::store_var(p_var, p_full_objects);
-	}
+bool FileAccessExtension::store_var(const Variant &p_var, bool p_full_objects) {
+	bool success = false;
+	if (!GDVIRTUAL_CALL(_store_var, p_var, p_full_objects, success)) {
+		return FileAccess::store_var(p_var, p_full_objects);
+	} else return success;
 }
 
 void FileAccessExtension::close() {

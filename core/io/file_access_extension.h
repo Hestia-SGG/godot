@@ -35,6 +35,10 @@
 #include "core/object/gdvirtual.gen.inc"
 #include "core/object/object.h"
 
+#ifndef GDVIRTUAL_REQUIRED_CALL
+#define GDVIRTUAL_REQUIRED_CALL GDVIRTUAL_CALL
+#endif
+
 class FileAccessExtension : public FileAccess {
 	GDCLASS(FileAccessExtension, FileAccess);
 
@@ -42,27 +46,31 @@ protected:
 	static void _bind_methods();
 
 private:
-	GDVIRTUAL1R(BitField<UnixPermissionFlags>, __get_unix_permissions, String);
+	GDVIRTUAL1R_REQUIRED(BitField<UnixPermissionFlags>, __get_unix_permissions, String);
 	virtual BitField<UnixPermissionFlags> _get_unix_permissions(const String &p_file) override;
-	GDVIRTUAL2R(Error, __set_unix_permissions, String, BitField<UnixPermissionFlags>);
+	GDVIRTUAL2R_REQUIRED(Error, __set_unix_permissions, String, BitField<UnixPermissionFlags>);
 	virtual Error _set_unix_permissions(const String &p_file, BitField<UnixPermissionFlags> p_permissions) override;
 
-	GDVIRTUAL1R(bool, __get_hidden_attribute, String);
+	GDVIRTUAL1R_REQUIRED(bool, __get_hidden_attribute, String);
 	virtual bool _get_hidden_attribute(const String &p_file) override;
-	GDVIRTUAL2R(Error, __set_hidden_attribute, String, bool);
+	GDVIRTUAL2R_REQUIRED(Error, __set_hidden_attribute, String, bool);
 	virtual Error _set_hidden_attribute(const String &p_file, bool p_hidden) override;
-	GDVIRTUAL1R(bool, __get_read_only_attribute, String);
+	GDVIRTUAL1R_REQUIRED(bool, __get_read_only_attribute, String);
 	virtual bool _get_read_only_attribute(const String &p_file) override;
-	GDVIRTUAL2R(Error, __set_read_only_attribute, String, bool);
+	GDVIRTUAL2R_REQUIRED(Error, __set_read_only_attribute, String, bool);
 	virtual Error _set_read_only_attribute(const String &p_file, bool p_ro) override;
 
-	GDVIRTUAL2R(Error, _open_internal, String, int);
+	GDVIRTUAL2R_REQUIRED(Error, _open_internal, String, int);
 	virtual Error open_internal(const String &p_path, int p_mode_flags) override;
-	GDVIRTUAL1R(uint64_t, __get_modified_time, String);
+	GDVIRTUAL1R_REQUIRED(uint64_t, __get_modified_time, String);
 	virtual uint64_t _get_modified_time(const String &p_file) override;
+	GDVIRTUAL1R_REQUIRED(uint64_t, __get_access_time, String);
+	virtual uint64_t _get_access_time(const String &p_file) override;
+	GDVIRTUAL1R_REQUIRED(int64_t, __get_size, String);
+	virtual int64_t _get_size(const String &p_file) override;
 
 public:
-	GDVIRTUAL0RC(bool, _is_open);
+	GDVIRTUAL0RC_REQUIRED(bool, _is_open);
 	virtual bool is_open() const override;
 
 	GDVIRTUAL0RC(String, _get_path);
@@ -70,19 +78,19 @@ public:
 	GDVIRTUAL0RC(String, _get_path_absolute);
 	virtual String get_path_absolute() const override;
 
-	GDVIRTUAL1(_seek, uint64_t);
+	GDVIRTUAL1_REQUIRED(_seek, uint64_t);
 	virtual void seek(uint64_t p_position) override;
-	GDVIRTUAL1(_seek_end, int64_t);
+	GDVIRTUAL1_REQUIRED(_seek_end, int64_t);
 	virtual void seek_end(int64_t p_position) override;
-	GDVIRTUAL0RC(uint64_t, _get_position);
+	GDVIRTUAL0RC_REQUIRED(uint64_t, _get_position);
 	virtual uint64_t get_position() const override;
-	GDVIRTUAL0RC(uint64_t, _get_length);
+	GDVIRTUAL0RC_REQUIRED(uint64_t, _get_length);
 	virtual uint64_t get_length() const override;
 
-	GDVIRTUAL0RC(bool, _eof_reached);
+	GDVIRTUAL0RC_REQUIRED(bool, _eof_reached);
 	virtual bool eof_reached() const override;
 
-	GDVIRTUAL0RC(uint8_t, _get_8);
+	GDVIRTUAL0RC_REQUIRED(uint8_t, _get_8);
 	virtual uint8_t get_8() const override;
 	GDVIRTUAL0RC(uint16_t, _get_16);
 	virtual uint16_t get_16() const override;
@@ -115,50 +123,52 @@ public:
 	GDVIRTUAL1RC(String, _get_as_utf8_string, bool);
 	virtual String get_as_utf8_string(bool p_skip_cr = false) const override;
 
-	GDVIRTUAL0RC(Error, _get_error);
+	GDVIRTUAL0RC_REQUIRED(Error, _get_error);
 	virtual Error get_error() const override;
 
-	GDVIRTUAL0(_flush);
+	GDVIRTUAL1R_REQUIRED(Error, _resize, int64_t);
+	virtual Error resize(int64_t p_length) override;
+	GDVIRTUAL0_REQUIRED(_flush);
 	virtual void flush() override;
-	GDVIRTUAL1(_store_8, uint8_t);
-	virtual void store_8(uint8_t p_dest) override;
-	GDVIRTUAL1(_store_16, uint16_t);
-	virtual void store_16(uint16_t p_dest) override;
-	GDVIRTUAL1(_store_32, uint32_t);
-	virtual void store_32(uint32_t p_dest) override;
-	GDVIRTUAL1(_store_64, uint64_t);
-	virtual void store_64(uint64_t p_dest) override;
+	GDVIRTUAL1R_REQUIRED(bool, _store_8, uint8_t);
+	virtual bool store_8(uint8_t p_dest) override;
+	GDVIRTUAL1R(bool, _store_16, uint16_t);
+	virtual bool store_16(uint16_t p_dest) override;
+	GDVIRTUAL1R(bool, _store_32, uint32_t);
+	virtual bool store_32(uint32_t p_dest) override;
+	GDVIRTUAL1R(bool, _store_64, uint64_t);
+	virtual bool store_64(uint64_t p_dest) override;
 
-	GDVIRTUAL1(_store_float, float);
-	virtual void store_float(float p_dest) override;
-	GDVIRTUAL1(_store_double, double);
-	virtual void store_double(double p_dest) override;
-	GDVIRTUAL1(_store_real, real_t);
-	virtual void store_real(real_t p_real) override;
+	GDVIRTUAL1R(bool, _store_float, float);
+	virtual bool store_float(float p_dest) override;
+	GDVIRTUAL1R(bool, _store_double, double);
+	virtual bool store_double(double p_dest) override;
+	GDVIRTUAL1R(bool, _store_real, real_t);
+	virtual bool store_real(real_t p_real) override;
 
-	GDVIRTUAL1(_store_string, String);
-	virtual void store_string(const String &p_string) override;
-	GDVIRTUAL1(_store_line, String);
-	virtual void store_line(const String &p_line) override;
-	GDVIRTUAL2(_store_csv_line, Vector<String>, String);
-	virtual void store_csv_line(const Vector<String> &p_values, const String &p_delim = ",") override;
+	GDVIRTUAL1R(bool, _store_string, String);
+	virtual bool store_string(const String &p_string) override;
+	GDVIRTUAL1R(bool, _store_line, String);
+	virtual bool store_line(const String &p_line) override;
+	GDVIRTUAL2R(bool, _store_csv_line, Vector<String>, String);
+	virtual bool store_csv_line(const Vector<String> &p_values, const String &p_delim = ",") override;
 
-	GDVIRTUAL1(_store_pascal_string, String);
-	virtual void store_pascal_string(const String &p_string) override;
+	GDVIRTUAL1R(bool, _store_pascal_string, String);
+	virtual bool store_pascal_string(const String &p_string) override;
 	GDVIRTUAL0RC(String, _get_pascal_string);
 	virtual String get_pascal_string() override;
 
-	virtual void store_buffer(const uint8_t *p_src, uint64_t p_length) override;
-	GDVIRTUAL1(_store_buffer, Vector<uint8_t>);
-	void store_buffer(const Vector<uint8_t> &p_buffer);
+	virtual bool store_buffer(const uint8_t *p_src, uint64_t p_length) override;
+	GDVIRTUAL1R(bool, _store_buffer, Vector<uint8_t>);
+	bool store_buffer(const Vector<uint8_t> &p_buffer);
 
-	GDVIRTUAL2(_store_var, Variant, bool);
-	void store_var(const Variant &p_var, bool p_full_objects = false);
+	GDVIRTUAL2R(bool, _store_var, Variant, bool);
+	bool store_var(const Variant &p_var, bool p_full_objects = false);
 
-	GDVIRTUAL0(_close);
+	GDVIRTUAL0_REQUIRED(_close);
 	virtual void close() override;
 
-	GDVIRTUAL1R(bool, _file_exists, String);
+	GDVIRTUAL1R_REQUIRED(bool, _file_exists, String);
 	virtual bool file_exists(const String &p_name) override;
 
 	GDVIRTUAL2R(Error, _reopen, String, int);
